@@ -1,0 +1,46 @@
+useStandardNaming: true
+
+images:
+  statsd:
+    repository: quay.io/prometheus/statsd-exporter
+  redis:
+    repository: docker.io/library/redis
+  pgbouncer:
+    repository: docker.io/apache/airflow
+  pgbouncerExporter:
+    repository: docker.io/apache/airflow
+  gitSync:
+    repository: registry.k8s.io/git-sync/git-sync
+
+dags:
+  persistence:
+    enabled: true
+  gitSync:
+    enabled: true
+    repo: git@github.com:liukunup/apache-airflow-data.git
+    branch: main
+    subPath: "DAGs"
+    sshKeySecret: airflow-ssh-secret
+extraSecrets:
+  airflow-ssh-secret:
+    data: |
+      gitSshKey: '<base64-converted-ssh-private-key>'
+
+env:
+  - name: "AIRFLOW_VAR_KEY"
+    value: "value_1"
+  - name: "AIRFLOW_VAR_ANOTHER_KEY"
+    value: "value_2"
+
+ingress:
+  web:
+    enabled: true
+    hosts:
+      - name: "airflow.homelab.com"
+
+createUserJob:
+  useHelmHooks: false
+  applyCustomEnv: false
+migrateDatabaseJob:
+  useHelmHooks: false
+  applyCustomEnv: false
