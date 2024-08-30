@@ -1,6 +1,8 @@
 useStandardNaming: true
 
 images:
+  airflow:
+    repository: docker.io/apache/airflow
   statsd:
     repository: quay.io/prometheus/statsd-exporter
   redis:
@@ -37,6 +39,31 @@ ingress:
     enabled: true
     hosts:
       - name: "airflow.homelab.com"
+        tls:
+          enabled: false
+          secretName: ""
+  flower:
+    enabled: true
+    hosts:
+      - name: "flower.homelab.com"
+        tls:
+          enabled: false
+          secretName: ""
+
+webserverSecretKey: "Ta8Enl5%B8FngG2H"
+
+flower:
+  enabled: true
+
+webserver:
+  defaultUser:
+    enabled: true
+    role: Admin
+    username: admin
+    email: admin@example.com
+    firstName: admin
+    lastName: user
+    password: admin
 
 createUserJob:
   useHelmHooks: false
